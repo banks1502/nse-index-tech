@@ -1,0 +1,51 @@
+.banner {
+    height: 60px;
+    width :95%;
+    margin: 10px auto 10px auto;
+    background-color: rgb(66, 196, 247);
+    border-radius: 2px;
+}
+
+.banner h2{
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    display: inline-block;
+}
+
+.banner Img{
+    height: 5%;
+    width : 5%;
+    position: relative;
+    float: left;
+    padding-right: 0;
+    padding-top: 0;
+}
+
+.main_tabs_style {
+    width: 90%;
+    height: 30px;
+    font-family: sans-serif;
+    margin-left: auto;
+    margin: auto;
+}
+
+
+.tab_style {
+    border-bottom: '1px solid #d6d6d6';
+    padding: '6px';
+    font-weight: 'normal'
+}
+
+.image_style {
+    height: "42px";
+    width: "97px"
+}
+
+* {
+    font-size: 100%;
+    font-family: Roboto;
+    color: black;
+   }
