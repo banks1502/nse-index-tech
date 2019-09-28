@@ -56,7 +56,7 @@ tab_selected_style = {
 dash_app.config['suppress_callback_exceptions'] = True
 
 #initialize MYSQL connection to fetch data
-engine = sqlalchemy.create_engine('mysql+pymysql://xdenachw:1k)72C2ojaMR(Z@104.37.86.29:3306/xdenachw')
+engine = sqlalchemy.create_engine('mysql+pymysql://<dbusername>@<DB IP:PORT>/<db password>')
 
 #extract nifty100 stocks trading close price in df
 data = pd.read_sql_query("select IndexName,IndexDate,ClosingIndexValue,PE,PB,DivYield,Volume from nse_indclose", engine)
