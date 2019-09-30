@@ -56,7 +56,7 @@ tab_selected_style = {
 dash_app.config['suppress_callback_exceptions'] = True
 
 #initialize MYSQL connection to fetch data
-engine = sqlalchemy.create_engine('mysql+pymysql://<dbusername>@<DB IP:PORT>/<db password>')
+engine = sqlalchemy.create_engine('mysql+pymysql://xdenachw:1k)72C2ojaMR(Z@104.37.86.29:3306/xdenachw')
 
 #extract nifty100 stocks trading close price in df
 data = pd.read_sql_query("select IndexName,IndexDate,ClosingIndexValue,PE,PB,DivYield,Volume from nse_indclose", engine)
@@ -110,7 +110,7 @@ graph = dcc.Graph(
 
 heading = html.Div(children=[
     html.H4(dcc.Markdown('''
-                    Welcome to **Nifty 100** stock technical indicator dashboard. Technical analysis is an analysis methodology for forecasting the direction of prices through the study of past market data, primarily price and volume. [Check technical indicator details](https://en.wikipedia.org/wiki/Technical_analysis)
+                    Welcome to **Nifty** chart dashboard. Technical analysis is an analysis methodology for forecasting the direction of prices through the study of past market data, primarily price and volume. [Check technical indicator details](https://en.wikipedia.org/wiki/Technical_analysis)
                     This dashboard contains 3 key technical indicator viz **Bollinger bands** – a range of price volatility **Relative strength index (RSI)** – oscillator showing price strength and **Stochastic oscillator** – close position within recent trading range.
                 '''
             )
@@ -177,13 +177,39 @@ if not vertical:
                                     dcc.Tab(label = 'PSU Bank',value = '10', selected_style=tab_selected_style),
                                     dcc.Tab(label = 'Realty',value = '11', selected_style=tab_selected_style),
                                 ],
-                                value='1',
+                                value='2',
                                 id='tabs2',
                                 vertical=False
                             ),
                         ])
                     ]),
-                    dcc.Tab(label = 'Thematic',value = '3',selected_style=tab_selected_style),
+                    dcc.Tab(label = 'Thematic',value = '3',selected_style=tab_selected_style,children=[
+                        html.Div([
+                            dcc.Tabs(
+                                className="tab_style",
+                                children=[
+                                    dcc.Tab(label = 'NIFTY100 ESG', value = '1', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'NIFTY100 Enhanced ESG',value = '2', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'NIFTY SME EMERGE',value = '3', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Commodities',value = '4', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty CPSE',value = '5', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Energy',value = '6', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty India Consumption',value = '7', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Infrastructure',value = '8', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty PSE',value = '9', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Services Sector',value = '10', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty100 Liquid 15',value = '11', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Midcap Liquid 15',value = '12', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty Shariah 25',value = '13', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty50 Shariah',value = '14', selected_style=tab_selected_style),
+                                    dcc.Tab(label = 'Nifty500 Shariah',value = '15', selected_style=tab_selected_style),
+                                ],
+                                value='1',
+                                id='tabs3',
+                                vertical=False
+                            ),
+                        ])
+                    ]),
                     dcc.Tab(label = 'Miscellaneous',value = '4',selected_style=tab_selected_style),
                     dcc.Tab(label = 'Contact Us',value = '5',selected_style=tab_selected_style,children=[
                         html.H4(dcc.Markdown(get_markdown('Contact Us'))),
@@ -196,45 +222,14 @@ if not vertical:
                 id='tabs',
                 vertical=vertical
             ),
-        html.Div(id ='tab-output1'),
         html.Div(
             html.Div(id='tab-output'),
             style={'width': '100%', 'float': 'right'}
-        )
+        ),
+        html.Div(id ='tab-output1'),
         ]),
     ], className ="main_tabs_style")
     ])
-
-else:
-    app.layout = html.Div([
-        html.Div(
-            dcc.Tabs(
-            children=[
-                dcc.Tab(label = 'Market Value', value = '1'),
-                dcc.Tab(label = 'Usage Over Time',value = '2'),
-                dcc.Tab(label = 'Predictions',value = '3'),
-                dcc.Tab(label = 'Target Pricing',value = '4'),
-            ],
-            value='3',
-            id='tabs',
-            vertical=vertical,
-                style={
-                    'height': '100vh',
-                    'borderRight': 'thin lightgrey solid',
-                    'textAlign': 'left'
-                }
-            ),
-            style={'width': '20%', 'float': 'left'}
-        ),
-        html.Div(
-            html.Div(id='tab-output'),
-            style={'width': '80%', 'float': 'right'}
-        )
-    ], style={
-        'fontFamily': 'Sans-Serif',
-        'margin-left': 'auto',
-        'margin-right': 'auto',
-    })
 
 
 @dash_app.callback(Output('tab-output', 'children'), 
@@ -695,14 +690,377 @@ def render_content(tabs1_value,tabs2_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-    elif outer_value == '3':
-        return html.Div([
-            html.H3('Coming Soon')
-        ])
     elif outer_value == '4':
         return html.Div([
             html.H3('Coming Soon')
         ])   
+
+@dash_app.callback(Output('tab-output1', 'children'), 
+              [Input('tabs3', 'value'),
+               Input('tabs', 'value')
+              ])
+def render_content1(tabs1_value, outer_value):
+    if outer_value =='3':
+        if tabs1_value == '1':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('NIFTY100 ESG-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='NIFTY100 ESG'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('NIFTY100 ESG-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])      
+        elif tabs1_value == '2':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('NIFTY100 Enhanced ESG-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='NIFTY100 Enhanced ESG'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('NIFTY100 Enhanced ESG-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '3':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('NIFTY SME EMERGE-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='NIFTY SME EMERGE'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('NIFTY SME EMERGE-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '4':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Commodities-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Commodities'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Commodities-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '5':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty CPSE-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty CPSE'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty CPSE-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '6':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Energy-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Energy'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Energy-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '7':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty India Consumption-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty India Consumption'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty India Consumption-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '8':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Infrastructure-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Infrastructure'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Infrastructure-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '9':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty PSE-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty PSE'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty PSE-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '10':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Services Sector-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Services Sector'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Services Sector-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '11':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty100 Liquid 15-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty100 Liquid 15'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty100 Liquid 15-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '12':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Midcap Liquid 15-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Midcap Liquid 15'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Midcap Liquid 15-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '13':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty Shariah 25-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty Shariah 25'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty Shariah 25-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '14':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty50 Shariah-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty50 Shariah'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty50 Shariah-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])
+        elif tabs1_value == '15':
+            return html.Div([
+                html.H4(dcc.Markdown(get_markdown('Nifty500 Shariah-graph'))),
+                dcc.Tabs(
+                    id='my-dropdown',
+                    value='Nifty500 Shariah'
+                ),
+                html.Div([
+                    dcc.RadioItems(
+                        id="select-freq", value='D', labelStyle={'display': 'inline-block', 'padding': 10},
+                        options=[
+                            {'label': "Daily", 'value': 'D'}, 
+                            {'label': "Weekly", 'value': 'W'}, 
+                            {'label': "Monthly", 'value': 'M'},
+                            {'label': "Quarterly", 'value': 'Q'},
+                        ], 
+                    )
+                ],style={'textAlign': "center", }),
+                dcc.Graph(id='graph'),
+                html.H4(dcc.Markdown(get_markdown('Nifty500 Shariah-graph1'))),
+                dcc.Graph(id='graph1'),
+                html.H4(dcc.Markdown(get_markdown('Volume'))),
+                dcc.Graph(id='graph2')
+            ])  
 
 #HOME PAGE callback
 @dash_app.callback(Output('homegraph', 'figure'),
