@@ -224,20 +224,30 @@ if not vertical:
             ),
         html.Div(
             html.Div(id='tab-output'),
-            style={'width': '100%', 'float': 'right'}
+            style={'width': '100%', 'float': 'inherit'}
         ),
         html.Div(id ='tab-output1'),
+        html.Div(id ='tab-output2'),
         ]),
     ], className ="main_tabs_style")
     ])
 
+#HOME PAGE callback
+@dash_app.callback(Output('homegraph', 'figure'),
+             [Input('dropdown', 'value'),
+              Input('checklist-input', 'value')])
+def update_homegraph(stock, indicators):
+    df = pdata.DataReader(stock, 'yahoo', '2018-01-01', str(datetime.datetime.now()).split()[0]).round(1)
+    dff = df.reset_index()
+    fig = plot_technical(stock,dff,indicators)
+    return fig
 
+#For 1st Tab (Broad Market)
 @dash_app.callback(Output('tab-output', 'children'), 
               [Input('tabs1', 'value'),
-               Input('tabs2', 'value'),
                Input('tabs', 'value')
               ])
-def render_content(tabs1_value,tabs2_value, outer_value):
+def render_content(tabs1_value, outer_value):
     if outer_value =='1':
         if tabs1_value == '1':
             return html.Div([
@@ -414,7 +424,18 @@ def render_content(tabs1_value,tabs2_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-    elif outer_value == '2':
+    elif outer_value == '4':
+        return html.Div([
+            html.H3('Coming Soon')
+        ])   
+
+#For 2nd Tab (Sector)
+@dash_app.callback(Output('tab-output1', 'children'), 
+              [Input('tabs2', 'value'),
+               Input('tabs', 'value')
+              ])
+def render_content2(tabs2_value, outer_value):
+    if outer_value == '2':
         if tabs2_value == '1':
             return html.Div([
                 html.Img(src="https://www.niftyindices.com/images/default-source/new-logo/sectoral-indices/nifty-auto.png",className="image_style"),
@@ -690,18 +711,15 @@ def render_content(tabs1_value,tabs2_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-    elif outer_value == '4':
-        return html.Div([
-            html.H3('Coming Soon')
-        ])   
-
-@dash_app.callback(Output('tab-output1', 'children'), 
+  
+#For 3rd Tab (Thematic)
+@dash_app.callback(Output('tab-output2', 'children'), 
               [Input('tabs3', 'value'),
                Input('tabs', 'value')
               ])
-def render_content1(tabs1_value, outer_value):
+def render_content3(tabs3_value, outer_value):
     if outer_value =='3':
-        if tabs1_value == '1':
+        if tabs3_value == '1':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('NIFTY100 ESG-graph'))),
                 dcc.Tabs(
@@ -725,7 +743,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])      
-        elif tabs1_value == '2':
+        elif tabs3_value == '2':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('NIFTY100 Enhanced ESG-graph'))),
                 dcc.Tabs(
@@ -749,7 +767,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '3':
+        elif tabs3_value == '3':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('NIFTY SME EMERGE-graph'))),
                 dcc.Tabs(
@@ -773,7 +791,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '4':
+        elif tabs3_value == '4':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Commodities-graph'))),
                 dcc.Tabs(
@@ -797,7 +815,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '5':
+        elif tabs3_value == '5':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty CPSE-graph'))),
                 dcc.Tabs(
@@ -821,7 +839,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '6':
+        elif tabs3_value == '6':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Energy-graph'))),
                 dcc.Tabs(
@@ -845,7 +863,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '7':
+        elif tabs3_value == '7':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty India Consumption-graph'))),
                 dcc.Tabs(
@@ -869,7 +887,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '8':
+        elif tabs3_value == '8':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Infrastructure-graph'))),
                 dcc.Tabs(
@@ -893,7 +911,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '9':
+        elif tabs3_value == '9':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty PSE-graph'))),
                 dcc.Tabs(
@@ -917,7 +935,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '10':
+        elif tabs3_value == '10':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Services Sector-graph'))),
                 dcc.Tabs(
@@ -941,7 +959,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '11':
+        elif tabs3_value == '11':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty100 Liquid 15-graph'))),
                 dcc.Tabs(
@@ -965,7 +983,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '12':
+        elif tabs3_value == '12':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Midcap Liquid 15-graph'))),
                 dcc.Tabs(
@@ -989,7 +1007,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '13':
+        elif tabs3_value == '13':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty Shariah 25-graph'))),
                 dcc.Tabs(
@@ -1013,7 +1031,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '14':
+        elif tabs3_value == '14':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty50 Shariah-graph'))),
                 dcc.Tabs(
@@ -1037,7 +1055,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])
-        elif tabs1_value == '15':
+        elif tabs3_value == '15':
             return html.Div([
                 html.H4(dcc.Markdown(get_markdown('Nifty500 Shariah-graph'))),
                 dcc.Tabs(
@@ -1061,17 +1079,7 @@ def render_content1(tabs1_value, outer_value):
                 html.H4(dcc.Markdown(get_markdown('Volume'))),
                 dcc.Graph(id='graph2')
             ])  
-
-#HOME PAGE callback
-@dash_app.callback(Output('homegraph', 'figure'),
-             [Input('dropdown', 'value'),
-              Input('checklist-input', 'value')])
-def update_homegraph(stock, indicators):
-    df = pdata.DataReader(stock, 'yahoo', '2018-01-01', str(datetime.datetime.now()).split()[0]).round(1)
-    dff = df.reset_index()
-    fig = plot_technical(stock,dff,indicators)
-    return fig
-        
+       
 @dash_app.callback(Output('textid', 'children'),
              [Input('dropdown', 'value'),
               Input('checklist-input', 'value')])
@@ -1084,8 +1092,7 @@ def on_form_change(dropdown_value, checklist_value):
     else:
         return html.H4(dcc.Markdown(get_markdown(checklist_value)))
 
-
-
+#inner call to display graphs
 @dash_app.callback([
     Output('graph', 'figure'),
     Output('graph1','figure'),
