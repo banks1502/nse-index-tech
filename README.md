@@ -8,5 +8,5 @@ Key components of the repository is:-
 2. Fetching data from mySQL database for daily index prices (update of daily prices are done separately)
 3. Getting NSE100 stock information based on datareader library of yahoo.
 
-check out <strong><a href="nifty-chart.com">nifty-chart.com</a> </strong> for the live version in Google cloud.
+check out <strong><a href="http://nifty-chart.com/">nifty-chart.com</a> </strong> for the live version in Google cloud.
 
